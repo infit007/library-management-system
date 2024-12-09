@@ -1,15 +1,16 @@
-from flask import Flask, request, jsonify, abort
+from flask import Flask
+from routes.books import books_bp
+from routes.members import members_bp
 
-app = Flask(__name__)
+def create_app() -> Flask:
+    app = Flask(__name__)
+    
+    app.register_blueprint(books_bp, url_prefix='/api/books')
+    app.register_blueprint(members_bp, url_prefix='/api/members')
+    
+    return app
 
-# In-memory databases
-books_db = {}
-members_db = {}
-tokens = {"admin_token": "admin"}  # Simple token system
-
-@app.route('/')
-def home():
-    return jsonify({"message": "Welcome to the Library Management System!"}), 200
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
